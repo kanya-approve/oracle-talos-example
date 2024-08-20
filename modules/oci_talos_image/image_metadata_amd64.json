@@ -1,0 +1,18 @@
+{
+    "externalLaunchOptions": {
+        "bootVolumeType": "PARAVIRTUALIZED",
+        "consistentVolumeNamingEnabled": true,
+        "firmware": "UEFI_64",
+        "launchOptionsSource": "PARAVIRTUALIZED",
+        "localDataVolumeType": "PARAVIRTUALIZED",
+        "networkType": "PARAVIRTUALIZED",
+        "pvAttachmentVersion": 2,
+        "pvEncryptionInTransitEnabled": true,
+        "remoteDataVolumeType": "PARAVIRTUALIZED"
+    },
+    "imageCapabilityData": null,
+    "imageCapsFormatVersion": null,
+    "operatingSystem": "Talos",
+    "operatingSystemVersion": "1.7.6",
+    "version": 2
+}
