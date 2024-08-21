@@ -22,7 +22,7 @@
 2. Use this repository as a template repository to make your own
 3. Clone the repository
 4. Create a bucket on Oracle and note the name
-5. Run the modules/oci_talos_image/prepare_images.bat or modules/oci_talos_image/prepare_images.sh to generate the Oracle image
+5. [Follow this tutorial to generate and Oracle image](https://www.talos.dev/v1.7/talos-guides/install/cloud-platforms/oracle/)
 6. Upload the created image (oracle-arm64.oci) to the bucket
 7. [Create an Oracle api key](https://cloud.oracle.com/identity/domains/my-profile/api-keys)
 8. Click "Add API Key"
