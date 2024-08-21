@@ -5,11 +5,16 @@
 - [7-Zip](https://www.7-zip.org/download.html) for Windows
 - Access to a Terminal/Command Line: You need access to a command-line interface (CLI) on your local machine to execute various commands.
 - Basic Understanding of Cloud and Infrastructure as Code: Familiarity with cloud computing concepts and Terraform is essential to follow along with the tutorial.
-- Git: Install Git for version control and repository management. You can download it from Git's official site.
+- [Github Desktop](https://github.com/apps/desktop)
 - GitHub Account: Create or have access to a GitHub account where you can create repositories and generate personal access tokens.
-- Python: Ensure you have Python (3.6 or later) for running a Python script in this repo.
-- Talos CLI: Install the Talos CLI (osctl) for interacting with Talos-managed Kubernetes clusters. Instructions can be found on the Talos website.
-- Terraform CLI: Install the Terraform CLI on your local machine to manage infrastructure as code. You can download it from the official Terraform website.
+- [Kubectl](https://kubernetes.io/docs/tasks/tools)
+- [Python](https://www.python.org/downloads)
+- [Talos CLI](https://www.talos.dev/latest/talos-guides/install/talosctl)
+- [Terraform CLI](https://developer.hashicorp.com/terraform/install)
+
+## Optional Prerequisites
+
+- [Lens](https://k8slens.dev/download)
 
 ## Steps
 
@@ -39,3 +44,6 @@
 24. Under the created workspace variables, create a new SENSITIVE workspace terraform variable called personal_ip and make the value your personal ipv4 address
 25. Under the created workspace variables, create a new SENSITIVE workspace ENVIRONMENT variable called GITHUB_TOKEN and make the value what you noted on step #15
 26. Start a new terraform cloud run and your new Oracle cloud talos cluster will be live
+27. In the repo folder, run ```TF_CLOUD_ORGANIZATION=YOUR_ORG_NAME TF_CLOUD_PROJECT=YOUR_PROJ_NAME terraform login```
+28. In the repo folder, run ```TF_CLOUD_ORGANIZATION=YOUR_ORG_NAME TF_CLOUD_PROJECT=YOUR_PROJ_NAME terraform init```
+29. In the repo folder, run ```TF_CLOUD_ORGANIZATION=YOUR_ORG_NAME TF_CLOUD_PROJECT=YOUR_PROJ_NAME python get_talos_files.py```
