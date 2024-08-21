@@ -35,5 +35,5 @@
 21. Under the created workspace variables, create a new workspace terraform variable called talos_images_bucket and make the value what you noted on step #4
 22. Under the created workspace variables, create a new SENSITIVE workspace terraform variable called private_key and make the value the contents of the downloaded private key from step #9
 23. Under the created workspace variables, create a new SENSITIVE workspace terraform variable called personal_ip and make the value your personal ipv4 address
-24. Under the created workspace variables, create a new SENSITIVE workspace environment variable called GITHUB_TOKEN and make the value what you noted on step #15
+24. Under the created workspace variables, create a new SENSITIVE workspace ENVIRONMENT variable called GITHUB_TOKEN and make the value what you noted on step #15
 25. Start a new terraform cloud run and your new Oracle cloud talos cluster will be live
