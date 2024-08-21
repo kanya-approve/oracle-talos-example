@@ -21,7 +21,7 @@ variable "controlplane_node_ips" {
 }
 
 variable "kubernetes_version" {
-  default     = "1.31.0"
+  default     = "1.30.3"
   description = "The version of Kubernetes to use for the cluster."
   type        = string
 
