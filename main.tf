@@ -127,12 +127,13 @@ module "talos" {
 module "oci_talos" {
   source = "./modules/oci_talos"
 
-  ad_number        = var.ad_number
-  arm64_image_id   = module.oci_talos_image.arm64_image_id
-  compartment_id   = oci_identity_compartment.compartment.id
-  nlb_id           = oci_network_load_balancer_network_load_balancer.talos_nlb.id
-  subnet_id        = module.oci_vcn.subnet_all_attributes["private"]["id"]
-  worker_user_data = module.talos.worker_machine_configuration
+  ad_number              = var.ad_number
+  arm64_image_id         = module.oci_talos_image.arm64_image_id
+  compartment_id         = oci_identity_compartment.compartment.id
+  controlplane_user_data = module.talos.controlplane_machine_configuration
+  nlb_id                 = oci_network_load_balancer_network_load_balancer.talos_nlb.id
+  subnet_id              = module.oci_vcn.subnet_all_attributes["private"]["id"]
+  worker_user_data       = module.talos.worker_machine_configuration
 }
 
 resource "tls_private_key" "flux" {
@@ -169,7 +170,7 @@ provider "flux" {
 }
 
 resource "flux_bootstrap_git" "talos_cluster" {
-  interval       = "5m0s"
+  interval       = "5m"
   network_policy = false
   path           = var.flux_repository_path
 }

@@ -42,13 +42,32 @@ resource "oci_network_load_balancer_listener" "controlplane_talos" {
   protocol                 = "TCP"
 }
 
-module "a1_flex_instance_group" {
+resource "random_id" "user_data_id" {
+  byte_length = 8
+  keepers = {
+    constant = "immutable"
+  }
+}
+
+resource "local_file" "controlplane_user_data" {
+  content    = var.controlplane_user_data
+  depends_on = [random_id.user_data_id]
+  filename   = "${path.module}/controlplane_user_data.txt"
+}
+
+resource "local_file" "worker_user_data" {
+  content    = var.worker_user_data
+  depends_on = [random_id.user_data_id]
+  filename   = "${path.module}/worker_user_data.txt"
+}
+
+module "controlplane_instance_group" {
   source = "oracle-terraform-modules/compute-instance/oci"
 
   ad_number                   = var.ad_number
   boot_volume_size_in_gbs     = 100
   compartment_ocid            = var.compartment_id
-  instance_count              = 2
+  instance_count              = 1
   instance_display_name       = "Talos ARM64 Master"
   instance_flex_ocpus         = 2
   instance_flex_memory_in_gbs = 12
@@ -56,6 +75,37 @@ module "a1_flex_instance_group" {
   source_ocid                 = var.arm64_image_id
   ssh_public_keys             = ""
   subnet_ocids                = [var.subnet_id]
+  user_data                   = local_file.controlplane_user_data.content_base64
+
+  cloud_agent_plugins = {
+    "autonomous_linux" : "DISABLED",
+    "bastion" : "DISABLED",
+    "block_volume_mgmt" : "DISABLED",
+    "custom_logs" : "DISABLED",
+    "java_management_service" : "DISABLED",
+    "management" : "DISABLED",
+    "monitoring" : "DISABLED",
+    "osms" : "DISABLED",
+    "run_command" : "DISABLED",
+    "vulnerability_scanning" : "DISABLED"
+  }
+}
+
+module "worker_instance_group" {
+  source = "oracle-terraform-modules/compute-instance/oci"
+
+  ad_number                   = var.ad_number
+  boot_volume_size_in_gbs     = 100
+  compartment_ocid            = var.compartment_id
+  instance_count              = 1
+  instance_display_name       = "Talos ARM64 Master"
+  instance_flex_ocpus         = 2
+  instance_flex_memory_in_gbs = 12
+  shape                       = "VM.Standard.A1.Flex"
+  source_ocid                 = var.arm64_image_id
+  ssh_public_keys             = ""
+  subnet_ocids                = [var.subnet_id]
+  user_data                   = local_file.worker_user_data.content_base64
 
   cloud_agent_plugins = {
     "autonomous_linux" : "DISABLED",

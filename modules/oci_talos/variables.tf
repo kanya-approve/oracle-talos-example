@@ -15,6 +15,11 @@ variable "compartment_id" {
   type        = string
 }
 
+variable "controlplane_user_data" {
+  description = "The controlplane userdata"
+  type        = string
+}
+
 variable "nlb_id" {
   description = "The network load balancer id"
   type        = string
