@@ -126,7 +126,7 @@ resource "oci_network_load_balancer_backend" "controlplane" {
   name                     = "controlplane-1"
   network_load_balancer_id = var.nlb_id
   port                     = 6443
-  target_id                = module.a1_flex_instance_group.instance_id[0]
+  target_id                = module.controlplane_instance_group.instance_id[0]
 }
 
 resource "oci_network_load_balancer_backend" "controlplane_talos" {
@@ -134,5 +134,5 @@ resource "oci_network_load_balancer_backend" "controlplane_talos" {
   network_load_balancer_id = var.nlb_id
   port                     = 50000
   name                     = "controlplane-talos-1"
-  target_id                = module.a1_flex_instance_group.instance_id[0]
+  target_id                = module.controlplane_instance_group.instance_id[0]
 }

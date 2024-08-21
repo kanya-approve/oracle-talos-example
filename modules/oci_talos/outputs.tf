@@ -1,7 +1,7 @@
 output "controlplane_node_ips" {
-  value = [module.a1_flex_instance_group.private_ip[0]]
+  value = [module.controlplane_instance_group.private_ip[0]]
 }
 
 output "worker_node_ips" {
-  value = [module.a1_flex_instance_group.private_ip[1]]
+  value = [module.worker_instance_group.private_ip[1]]
 }
