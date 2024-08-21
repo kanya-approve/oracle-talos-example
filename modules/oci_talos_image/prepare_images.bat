@@ -10,9 +10,9 @@ IF %ERRORLEVEL% EQU 0 (
     xz -d --keep oracle-arm64.qcow2.xz
 ) ELSE (
     REM If xz is not found, check for 7z and use it
-    where "C:\Program Files\7-Zip\7z.exe" >nul 2>&1
+    where 7z >nul 2>&1
     IF %ERRORLEVEL% EQU 0 (
-        "C:\Program Files\7-Zip\7z.exe" e oracle-arm64.qcow2.xz
+        7z e oracle-arm64.qcow2.xz
     ) ELSE (
         echo Neither xz nor 7z found. Please install one of them.
         exit /b 1
