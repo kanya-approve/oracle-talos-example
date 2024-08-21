@@ -3,5 +3,5 @@ output "controlplane_node_ips" {
 }
 
 output "worker_node_ips" {
-  value = [module.worker_instance_group.private_ip[1]]
+  value = [module.worker_instance_group.private_ip[0]]
 }
