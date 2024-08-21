@@ -55,7 +55,7 @@ resource "oci_core_security_list" "security_list" {
 
   ingress_security_rules {
     protocol = "all"
-    source   = var.personal_ip
+    source   = "${var.personal_ip}/32"
   }
 }
 
