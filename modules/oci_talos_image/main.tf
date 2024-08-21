@@ -17,7 +17,7 @@ resource "oci_core_image" "talos_arm64" {
     namespace_name           = data.oci_objectstorage_bucket.images_bucket.namespace
     object_name              = "oracle-arm64.oci"
     operating_system         = "Talos Linux"
-    operating_system_version = "1.7"
+    operating_system_version = "1.7.6"
     source_image_type        = "QCOW2"
     source_type              = "objectStorageTuple"
   }
