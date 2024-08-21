@@ -18,18 +18,18 @@
 
 ## Steps
 
-1. [Follow this tutorial until the "Convert your trial to PAYG" step](https://mattscott.cloud/kubernetes-on-oracle-cloud-for-free/)
+1. [Follow this tutorial until the "Convert your trial to PAYG" step](https://mattscott.cloud/kubernetes-on-oracle-cloud-for-free)
 2. Use this repository as a template repository to make your own
 3. Clone the repository
 4. Create a bucket on Oracle and note the name
-5. [Follow this tutorial to generate and Oracle image](https://www.talos.dev/v1.7/talos-guides/install/cloud-platforms/oracle/)
+5. [Follow this tutorial under "Upload image" to generate and Oracle image](https://www.talos.dev/v1.7/talos-guides/install/cloud-platforms/oracle/#upload-image)
 6. Upload the created image (oracle-arm64.oci) to the bucket
 7. [Create an Oracle api key](https://cloud.oracle.com/identity/domains/my-profile/api-keys)
 8. Click "Add API Key"
 9. Click "Add" after downloading the private key
 10. For this newly generated api key, click on the 3 dots to the right of it and click "View configuration file"
 11. Copy and note all the information there
-12. [Sign up for Terraform cloud](https://app.terraform.io/)
+12. [Sign up for Terraform cloud](https://app.terraform.io)
 13. Create a VCS project on terraform cloud and note the name
 14. Create a workspace on terraform cloud under that project and note the name
 15. [Create a classic Github personal access token with repo permissions using this link and note the value](https://github.com/settings/tokens/new)
