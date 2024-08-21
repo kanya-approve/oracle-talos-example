@@ -1,5 +1,5 @@
 resource "oci_identity_compartment" "compartment" {
-  compartment_id = module.tf_dynamic_credentials.root_compartment_id
+  compartment_id = var.tenancy_ocid
   description    = var.compartment_description
   name           = var.compartment_name
 }
