@@ -57,6 +57,46 @@ resource "oci_core_security_list" "security_list" {
     protocol = "all"
     source   = "${var.personal_ip}/32"
   }
+
+  ingress_security_rules {
+    protocol = 6
+    source   = "0.0.0.0/0"
+
+    tcp_options {
+      max = 6443
+      min = 6443
+    }
+  }
+
+  ingress_security_rules {
+    protocol = 6
+    source   = "0.0.0.0/0"
+
+    tcp_options {
+      max = 50001
+      min = 50000
+    }
+  }
+
+  ingress_security_rules {
+    protocol = 17
+    source   = "0.0.0.0/0"
+
+    udp_options {
+      max = 51820
+      min = 51820
+    }
+  }
+
+  ingress_security_rules {
+    protocol = 17
+    source   = "0.0.0.0/0"
+
+    udp_options {
+      max = 51871
+      min = 51871
+    }
+  }
 }
 
 module "oci_talos_image" {
