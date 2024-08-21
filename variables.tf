@@ -88,18 +88,6 @@ variable "talos_images_bucket" {
   type        = string
 }
 
-variable "tf_organization" {
-  description = "The TF cloud organization name."
-  nullable    = false
-  type        = string
-}
-
-variable "tf_project" {
-  description = "The TF cloud organization name."
-  nullable    = false
-  type        = string
-}
-
 variable "vcn_name" {
   default     = "vcn"
   description = "The name of the Virtual Cloud Network (VCN)."
