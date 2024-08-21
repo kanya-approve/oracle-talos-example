@@ -8,14 +8,6 @@ variable "cluster_domain_endpoint" {
   default     = ""
   description = "The cluster domain endpoint (empty if you don't have one)."
   type        = string
-
-  validation {
-    condition = (
-      var.cluster_domain_endpoint == "" ||
-      can(regex("^((?!-)[A-Za-z0-9-]{1,63}(?<!-)\\.)+[A-Za-z]{2,6}$", var.cluster_domain_endpoint))
-    )
-    error_message = "The cluster domain endpoint must be an empty string or a valid domain name (e.g., example.com)."
-  }
 }
 
 variable "compartment_description" {

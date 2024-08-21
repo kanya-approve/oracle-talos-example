@@ -10,7 +10,7 @@ resource "oci_core_image" "talos_amd64" {
 
   image_source_details {
     bucket_name              = var.images_bucket
-    namespace_name           = data.oci_objectstorage_namespace.default_namespace
+    namespace_name           = data.oci_objectstorage_namespace.default_namespace.namespace
     object_name              = "oracle-amd64.oci"
     operating_system         = "Talos"
     operating_system_version = "1.7.6"
@@ -30,7 +30,7 @@ resource "oci_core_image" "talos_arm64" {
 
   image_source_details {
     bucket_name              = var.images_bucket
-    namespace_name           = data.oci_objectstorage_namespace.default_namespace
+    namespace_name           = data.oci_objectstorage_namespace.default_namespace.namespace
     object_name              = "oracle-amd64.oci"
     operating_system         = "Talos"
     operating_system_version = "1.7.6"
