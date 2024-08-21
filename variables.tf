@@ -1,6 +1,6 @@
 variable "ad_number" {
   description = "The AD number for your A1 flex instance on Oracle"
-  nullable    = false
+  default     = 1
   type        = number
 }
 
