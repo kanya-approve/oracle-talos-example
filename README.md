@@ -26,8 +26,8 @@
 12. [Sign up for Terraform cloud](https://app.terraform.io/)
 13. Create a VCS project on terraform cloud and note the name
 14. Create a workspace on terraform cloud under that project and note the name
-15. [Create a classic Github personal access token with repo permissions and note the value](https://github.com/settings/tokens/new)
-16. [Create a new repo titled fleet-infra](https://github.com/new?template_name=oracle-talos-flux-example&template_owner=kanya-approve)
+15. [Create a classic Github personal access token with repo permissions using this link and note the value](https://github.com/settings/tokens/new)
+16. [Create a new repo titled fleet-infra using this link](https://github.com/new?template_name=oracle-talos-flux-example&template_owner=kanya-approve&name=fleet-infra)
 17. Under the created workspace variables, create a new workspace environment variable called TF_VAR_fingerprint and make the value after fingerprint= from what you copied on step #11
 18. Under the created workspace variables, create a new workspace environment variable called TF_VAR_region and make the value after region= from what you copied on step #11
 19. Under the created workspace variables, create a new workspace environment variable called TF_VAR_tenancy_ocid and make the value after tenancy= from what you copied on step #11
