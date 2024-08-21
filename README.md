@@ -31,8 +31,8 @@
 17. Under the created workspace variables, create a new workspace terraform variable called cluster_domain_endpoint and make the value your domain (example.com) if you have one otherwise leave it empty
 18. Under the created workspace variables, create a new workspace terraform variable called fingerprint and make the value after fingerprint= from what you copied on step #11
 19. Under the created workspace variables, create a new workspace terraform variable called region and make the value after region= from what you copied on step #11
-20. Under the created workspace variables, create a new workspace terraform variable called tenancy_ocid and make the value after tenancy= from what you copied on step #11
-21. Under the created workspace variables, create a new workspace terraform variable called user_ocid and make the value after tenancy= from what you copied on step #11
+20. Under the created workspace variables, create a new workspace terraform variable called tenancy and make the value after tenancy= from what you copied on step #11
+21. Under the created workspace variables, create a new workspace terraform variable called user_ocid and make the value after user= from what you copied on step #11
 22. Under the created workspace variables, create a new workspace terraform variable called talos_images_bucket and make the value what you noted on step #4
 23. Under the created workspace variables, create a new SENSITIVE workspace terraform variable called private_key and make the value the contents of the downloaded private key from step #9
 24. Under the created workspace variables, create a new SENSITIVE workspace terraform variable called personal_ip and make the value your personal ipv4 address
