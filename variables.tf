@@ -36,6 +36,12 @@ variable "flux_repository_name" {
   type        = string
 }
 
+variable "fingerprint" {
+  description = "The oci_fingerprint to auth to Oracle Cloud"
+  nullable    = false
+  type        = string
+}
+
 variable "internet_gateway_display_name" {
   default     = "igw"
   description = "The display name of the internet gateway."
