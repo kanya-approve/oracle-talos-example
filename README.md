@@ -2,6 +2,7 @@
 
 ## Prerequisites
 
+- [7-Zip](https://www.7-zip.org/download.html) for Windows
 - Access to a Terminal/Command Line: You need access to a command-line interface (CLI) on your local machine to execute various commands.
 - Basic Understanding of Cloud and Infrastructure as Code: Familiarity with cloud computing concepts and Terraform is essential to follow along with the tutorial.
 - Git: Install Git for version control and repository management. You can download it from Git's official site.
