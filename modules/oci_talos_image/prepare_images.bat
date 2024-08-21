@@ -7,7 +7,7 @@ REM Check if xz is installed
 where xz >nul 2>&1
 IF %ERRORLEVEL% EQU 0 (
     REM If xz is found, use it to decompress
-    xz -d oracle-arm64.qcow2.xz
+    xz -d --keep oracle-arm64.qcow2.xz
 ) ELSE (
     REM If xz is not found, check for 7z and use it
     where "C:\Program Files\7-Zip\7z.exe" >nul 2>&1
