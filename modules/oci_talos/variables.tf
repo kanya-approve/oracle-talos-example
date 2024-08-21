@@ -1,8 +1,3 @@
-variable "amd64_image_id" {
-  description = "The Talos AMD64 image id"
-  type        = string
-}
-
 variable "ad_number" {
   default     = 3
   description = "The AD number for your A1 flex instance on Oracle"

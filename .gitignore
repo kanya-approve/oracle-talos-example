@@ -32,5 +32,4 @@ override.tf.json
 controlplane.yaml
 talosconfig
 worker.yaml
-oracle-amd64.oci
 oracle-arm64.oci

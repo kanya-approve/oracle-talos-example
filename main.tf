@@ -88,7 +88,6 @@ module "oci_talos" {
   source = "./modules/oci_talos"
 
   ad_number        = var.ad_number
-  amd64_image_id   = module.oci_talos_image.amd64_image_id
   arm64_image_id   = module.oci_talos_image.arm64_image_id
   compartment_id   = oci_identity_compartment.compartment.id
   nlb_id           = oci_network_load_balancer_network_load_balancer.talos_nlb.id
