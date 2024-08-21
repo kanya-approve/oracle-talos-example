@@ -130,8 +130,6 @@ provider "flux" {
 }
 
 resource "flux_bootstrap_git" "talos_cluster" {
-  depends_on = [helm_release.cilium, module.talos]
-
   interval       = "5m0s"
   network_policy = false
   path           = var.flux_repository_path

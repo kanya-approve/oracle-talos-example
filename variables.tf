@@ -36,6 +36,12 @@ variable "flux_repository_name" {
   type        = string
 }
 
+variable "flux_repository_name" {
+  default = "./clusters/talos-cluster"
+  description = "The path in the Git repository to the local directory that stores your Flux configuration."
+  type        = string
+}
+
 variable "fingerprint" {
   description = "The oci_fingerprint to auth to Oracle Cloud"
   nullable    = false
