@@ -82,8 +82,26 @@ variable "public_subnet_name" {
   type        = string
 }
 
+variable "region" {
+  description = "The oci_region to auth to Oracle Cloud"
+  nullable    = false
+  type        = string
+}
+
 variable "talos_images_bucket" {
   description = "The name of the bucket that stores the Talos images."
+  nullable    = false
+  type        = string
+}
+
+variable "tenancy_ocid" {
+  description = "The tenancy_ocid to auth to Oracle Cloud"
+  nullable    = false
+  type        = string
+}
+
+variable "user_ocid" {
+  description = "The user_ocid to auth to Oracle Cloud"
   nullable    = false
   type        = string
 }
