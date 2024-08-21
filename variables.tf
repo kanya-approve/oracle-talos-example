@@ -69,7 +69,7 @@ variable "personal_ip" {
   validation {
     condition = (
       var.personal_ip == "" ||
-      can(regex("^([0-9]{1,3}\\.){3}[0-9]{1,3}$", var.personal_ip))
+      can(regex("(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]", var.personal_ip))
     )
     error_message = "The personal IP must be an empty string or a valid IP address (e.g., 1.1.1.1)."
   }
