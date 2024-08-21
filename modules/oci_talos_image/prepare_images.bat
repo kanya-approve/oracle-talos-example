@@ -10,7 +10,6 @@ IF %ERRORLEVEL% EQU 0 (
     xz -d --keep oracle-arm64.qcow2.xz
 ) ELSE (
     REM If xz is not found, check for 7z and use it
-    where 7z >nul 2>&1
     IF %ERRORLEVEL% EQU 0 (
         7z e oracle-arm64.qcow2.xz
     ) ELSE (
