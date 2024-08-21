@@ -27,11 +27,13 @@
 13. Create a VCS project on terraform cloud and note the name
 14. Create a workspace on terraform cloud under that project and note the name
 15. [Create a classic Github personal access token with repo permissions and note the value](https://github.com/settings/tokens/new)
-16. Under the created workspace variables, create a new workspace environment variable called TF_VAR_fingerprint and make the value after fingerprint= from what you copied on step #11
-17. Under the created workspace variables, create a new workspace environment variable called TF_VAR_region and make the value after region= from what you copied on step #11
-18. Under the created workspace variables, create a new workspace environment variable called TF_VAR_tenancy_ocid and make the value after tenancy= from what you copied on step #11
-19. Under the created workspace variables, create a new workspace environment variable called TF_VAR_user_ocid and make the value after tenancy= from what you copied on step #11
-20. Under the created workspace variables, create a new workspace environment variable called TF_VAR_talos_images_bucket and make the value what you noted on step #4
-21. Under the created workspace variables, create a new SENSITIVE workspace environment variable called GITHUB_TOKEN and make the value what you noted on step #15
-22. Under the created workspace variables, create a new SENSITIVE workspace environment variable called TF_VAR_private_key and make the value the contents of the downloaded private key from step #9
-23. Start a new terraform cloud run and your new Oracle cloud talos cluster will be live
+16. [Create a new repo titled fleet-infra](https://github.com/new?template_name=oracle-talos-flux-example&template_owner=kanya-approve)
+17. Under the created workspace variables, create a new workspace environment variable called TF_VAR_fingerprint and make the value after fingerprint= from what you copied on step #11
+18. Under the created workspace variables, create a new workspace environment variable called TF_VAR_region and make the value after region= from what you copied on step #11
+19. Under the created workspace variables, create a new workspace environment variable called TF_VAR_tenancy_ocid and make the value after tenancy= from what you copied on step #11
+20. Under the created workspace variables, create a new workspace environment variable called TF_VAR_user_ocid and make the value after tenancy= from what you copied on step #11
+21. Under the created workspace variables, create a new workspace environment variable called TF_VAR_talos_images_bucket and make the value what you noted on step #4
+22. Under the created workspace variables, create a new SENSITIVE workspace environment variable called GITHUB_TOKEN and make the value what you noted on step #15
+23. Under the created workspace variables, create a new SENSITIVE workspace environment variable called TF_VAR_private_key and make the value the contents of the downloaded private key from step #9
+24. Under the created workspace variables, create a new SENSITIVE workspace environment variable called TF_VAR_personal_ip and make the value your personal ipv4 address
+25. Start a new terraform cloud run and your new Oracle cloud talos cluster will be live
