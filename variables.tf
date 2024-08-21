@@ -106,14 +106,14 @@ variable "talos_images_bucket" {
   type        = string
 }
 
-variable "tenancy" {
+variable "tenancy_ocid" {
   description = "The tenancy to auth to Oracle Cloud"
   nullable    = false
   type        = string
 }
 
 variable "user_ocid" {
-  description = "The user_ocid to auth to Oracle Cloud"
+  description = "The user to auth to Oracle Cloud"
   nullable    = false
   type        = string
 }
