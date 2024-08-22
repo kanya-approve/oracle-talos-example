@@ -20,9 +20,6 @@ for resource in resources:
             "attributes"
         ]["machine_configuration"]
 
-with open("config", "w") as f:
-    f.write(talosconfig)
-
 dir_path = os.path.expanduser("~/.talos/")
 config_file_path = os.path.join(dir_path, "config")
 
