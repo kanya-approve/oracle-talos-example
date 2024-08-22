@@ -72,6 +72,7 @@ module "controlplane_instance_group" {
 }
 
 module "worker_instance_group" {
+  depends_on = [module.controlplane_instance_group]
   source = "oracle-terraform-modules/compute-instance/oci"
 
   ad_number                   = var.ad_number
