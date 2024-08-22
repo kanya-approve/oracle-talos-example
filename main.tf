@@ -152,12 +152,110 @@ resource "github_repository_deploy_key" "this" {
   title      = "FluxCD"
 }
 
+provider "helm" {
+  kubernetes {
+    client_certificate     = base64decode(module.talos.kubeconfig.client_certificate)
+    client_key             = base64decode(module.talos.kubeconfig.client_key)
+    cluster_ca_certificate = base64decode(module.talos.kubeconfig.ca_certificate)
+    host                   = module.talos.kubeconfig.host
+  }
+}
+
+resource "helm_release" "cilium" {
+  chart        = "cilium"
+  force_update = true
+  name         = "cilium"
+  namespace    = "kube-system"
+  repository   = "https://helm.cilium.io"
+  version      = "1.15.8"
+
+  set {
+    name  = "bandwidthManager.bbr"
+    value = true
+  }
+
+  set {
+    name  = "bandwidthManager.enabled"
+    value = true
+  }
+
+  set {
+    name  = "bpf.masquerade"
+    value = true
+  }
+
+  set {
+    name  = "cgroup.autoMount.enabled"
+    value = false
+  }
+
+  set {
+    name  = "cgroup.hostRoot"
+    value = "/sys/fs/cgroup"
+  }
+
+  set {
+    name  = "enableRuntimeDeviceDetection"
+    value = true
+  }
+
+  set {
+    name  = "hubble.enabled"
+    value = false
+  }
+
+  set {
+    name  = "hubble.relay.enabled"
+    value = false
+  }
+
+  set {
+    name  = "hubble.ui.enabled"
+    value = false
+  }
+
+  set {
+    name  = "ipam.mode"
+    value = "kubernetes"
+  }
+
+  set {
+    name  = "k8sNetworkPolicy.enabled"
+    value = false
+  }
+
+  set {
+    name  = "k8sServiceHost"
+    value = "localhost"
+  }
+
+  set {
+    name  = "k8sServicePort"
+    value = "7445"
+  }
+
+  set {
+    name  = "kubeProxyReplacement"
+    value = true
+  }
+
+  set {
+    name  = "securityContext.capabilities.ciliumAgent"
+    value = "{CHOWN,KILL,NET_ADMIN,NET_RAW,IPC_LOCK,SYS_ADMIN,SYS_RESOURCE,DAC_OVERRIDE,FOWNER,SETGID,SETUID}"
+  }
+
+  set {
+    name  = "securityContext.capabilities.cleanCiliumState"
+    value = "{NET_ADMIN,SYS_ADMIN,SYS_RESOURCE}"
+  }
+}
+
 provider "flux" {
   git = {
     url = "ssh://git@github.com/${data.github_repository.this.full_name}.git"
     ssh = {
-      username    = "git"
       private_key = tls_private_key.flux.private_key_pem
+      username    = "git"
     }
   }
 
