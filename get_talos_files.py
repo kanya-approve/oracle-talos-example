@@ -10,11 +10,11 @@ resources = state.pop("resources")
 
 machine_configuration = {"controlplane": "", "worker": ""}
 
-talosconfig = ""
+TALOSCONFIG = ""
 
 for resource in resources:
     if resource["type"] == "talos_client_configuration":
-        talosconfig = resource["instances"][0]["attributes"]["talos_config"]
+        TALOSCONFIG = resource["instances"][0]["attributes"]["talos_config"]
     elif resource["type"] == "talos_machine_configuration":
         machine_configuration[resource["name"]] = resource["instances"][0][
             "attributes"
@@ -26,17 +26,17 @@ config_file_path = os.path.join(dir_path, "config")
 os.makedirs(dir_path, exist_ok=True)
 
 with open(config_file_path, "w") as f:
-    f.write(talosconfig)
+    f.write(TALOSCONFIG)
 
-lines = talosconfig.splitlines()
-first_endpoint = None
+lines = TALOSCONFIG.splitlines()
+FIRST_ENDPOINT = None
 
 for i, line in enumerate(lines):
     if "endpoints:" in line:
-        first_endpoint = lines[i + 1].strip().lstrip("- ")
+        FIRST_ENDPOINT = lines[i + 1].strip().lstrip("- ")
         break
 
-os.system(f"talosctl kubeconfig --force -n {first_endpoint}")
+os.system(f"talosctl kubeconfig --force -n {FIRST_ENDPOINT}")
 
 with open("controlplane.yaml", "w") as f:
     f.write(machine_configuration["controlplane"])
