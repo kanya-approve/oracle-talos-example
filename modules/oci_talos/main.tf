@@ -42,15 +42,6 @@ resource "oci_network_load_balancer_listener" "controlplane_talos" {
   protocol                 = "TCP"
 }
 
-resource "local_file" "first_run_flag" {
-  content  = "first_run"
-  filename = "${path.module}/first_run.txt"
-}
-
-data "local_file" "first_run_check" {
-  filename = local_file.first_run_flag.filename
-}
-
 module "controlplane_instance_group" {
   source = "oracle-terraform-modules/compute-instance/oci"
 
