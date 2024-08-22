@@ -44,9 +44,19 @@
 24. Under the created workspace variables, create a new SENSITIVE workspace terraform variable called personal_ip and make the value your personal ipv4 address
 25. Under the created workspace variables, create a new SENSITIVE workspace ENVIRONMENT variable called GITHUB_TOKEN and make the value what you noted on step #15
 26. Start a new terraform cloud run and your new Oracle cloud talos cluster will be live
-27. In your repo folder, run
-```TF_CLOUD_ORGANIZATION=YOUR_ORG_NAME TF_CLOUD_PROJECT=YOUR_PROJ_NAME TF_WORKSPACE=YOUR_WORKSPACE_NAME terraform login```
-28. In your repo folder, run
-```TF_CLOUD_ORGANIZATION=YOUR_ORG_NAME TF_CLOUD_PROJECT=YOUR_PROJ_NAME TF_WORKSPACE=YOUR_WORKSPACE_NAME terraform init```
-29. In your repo folder, run
-```TF_CLOUD_ORGANIZATION=YOUR_ORG_NAME TF_CLOUD_PROJECT=YOUR_PROJ_NAME TF_WORKSPACE=YOUR_WORKSPACE_NAME python get_talos_files.py```
+27. In your repo folder, create a backend.tf file with the contents below
+
+    ```hcl
+    terraform {
+        cloud {
+            organization = "REPLACE_WITH_YOUR_ORGANIZATION_NAME"
+
+            workspaces {
+                name = "REPLACE_WITH_YOUR_WORKSPACE_NAME"
+                project = "REPLACE_WITH_YOUR_PROJECT_NAME"
+            }
+        }
+    }
+    ```
+
+28. In your repo folder, run python get_talos_files.py```
