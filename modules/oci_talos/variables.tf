@@ -20,6 +20,10 @@ variable "controlplane_user_data" {
   type        = string
 }
 
+variable "is_first_run" {
+  default = true
+}
+
 variable "nlb_id" {
   description = "The network load balancer id"
   type        = string

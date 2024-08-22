@@ -42,6 +42,15 @@ resource "oci_network_load_balancer_listener" "controlplane_talos" {
   protocol                 = "TCP"
 }
 
+resource "local_file" "first_run_flag" {
+  content  = "first_run"
+  filename = "${path.module}/first_run.txt"
+}
+
+data "local_file" "first_run_check" {
+  filename = local_file.first_run_flag.filename
+}
+
 module "controlplane_instance_group" {
   source = "oracle-terraform-modules/compute-instance/oci"
 
@@ -73,7 +82,7 @@ module "controlplane_instance_group" {
 
 module "worker_instance_group" {
   depends_on = [module.controlplane_instance_group]
-  source = "oracle-terraform-modules/compute-instance/oci"
+  source     = "oracle-terraform-modules/compute-instance/oci"
 
   ad_number                   = var.ad_number
   boot_volume_size_in_gbs     = 100
@@ -86,6 +95,7 @@ module "worker_instance_group" {
   source_ocid                 = var.arm64_image_id
   ssh_public_keys             = ""
   subnet_ocids                = [var.subnet_id]
+  user_data                   = var.is_first_run ? base64encode(var.worker_user_data) : ""
 
   cloud_agent_plugins = {
     "autonomous_linux" : "DISABLED",
