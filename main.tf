@@ -29,9 +29,9 @@ module "oci_vcn" {
   }
 }
 
-resource "oci_core_security_list" "security_list" {
-  compartment_id = oci_identity_compartment.compartment.id
-  vcn_id         = module.oci_vcn.vcn_id
+resource "oci_core_default_security_list" "default_security_list" {
+  manage_default_resource_id = module.oci_vcn.default_security_list_id
+  display_name               = "Default Security List for ${var.vcn_name}"
 
   egress_security_rules {
     destination = "0.0.0.0/0"
