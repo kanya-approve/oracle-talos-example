@@ -59,4 +59,4 @@
     }
     ```
 
-28. In your repo folder, run python get_talos_files.py```
+28. In your repo folder, run ```python get_talos_files.py```
