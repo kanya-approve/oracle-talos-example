@@ -40,3 +40,9 @@ for i, line in enumerate(lines):
         break
 
 os.system(f"talosctl kubeconfig --force -n {first_endpoint}")
+
+with open("controlplane.yaml", "w") as f:
+    f.write(machine_configuration["controlplane"])
+
+with open("worker.yaml", "w") as f:
+    f.write(machine_configuration["worker"])
