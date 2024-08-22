@@ -146,10 +146,10 @@ data "github_repository" "this" {
 }
 
 resource "github_repository_deploy_key" "this" {
-  title      = "FluxCD"
-  repository = data.github_repository.this.name
   key        = tls_private_key.flux.public_key_openssh
   read_only  = "false"
+  repository = data.github_repository.this.name
+  title      = "FluxCD"
 }
 
 provider "flux" {
