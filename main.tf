@@ -271,4 +271,20 @@ resource "flux_bootstrap_git" "talos_cluster" {
   interval       = "5m"
   network_policy = false
   path           = var.flux_repository_path
+
+  provisioner "local-exec" {
+    command = <<EOT
+      # Fetch the Sealed Secrets controller's certificate
+      kubeseal --fetch-cert --controller-name=sealed-secrets-controller --controller-namespace=flux-system > pub-sealed-secrets.pem
+    EOT
+  }
+}
+
+resource "github_repository_file" "sealed_secret_cert" {
+  repository          = data.github_repository.this.name
+  file                = "pub-sealed-secrets.pem"
+  content             = filebase64("${path.module}/pub-sealed-secrets.pem")
+  branch              = "main"
+  commit_message      = "Add Sealed Secrets public certificate"
+  overwrite_on_create = true
 }
