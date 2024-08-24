@@ -8,6 +8,7 @@
 - [Github Desktop](https://github.com/apps/desktop)
 - GitHub Account: Create or have access to a GitHub account where you can create repositories and generate personal access tokens.
 - [Kubectl](https://kubernetes.io/docs/tasks/tools)
+- [Kubeseal](https://github.com/bitnami-labs/sealed-secrets)
 - [Python](https://www.python.org/downloads)
 - [Talos ARM64 Image](https://factory.talos.dev/?arch=arm64&cmdline-set=true&extensions=-&extensions=siderolabs%2Fiscsi-tools&platform=oracle&target=cloud&version=1.7.6)
 - [Talos CLI](https://www.talos.dev/latest/talos-guides/install/talosctl)
