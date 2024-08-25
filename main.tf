@@ -282,7 +282,7 @@ resource "flux_bootstrap_git" "talos_cluster" {
 
 resource "github_repository_file" "sealed_secret_cert" {
   repository          = data.github_repository.this.name
-  file                = "pub-sealed-secrets.pem"
+  file                = "${var.flux_repository_path}/pub-sealed-secrets.pem"
   content             = filebase64("${path.module}/pub-sealed-secrets.pem")
   branch              = "main"
   commit_message      = "Add Sealed Secrets public certificate"
