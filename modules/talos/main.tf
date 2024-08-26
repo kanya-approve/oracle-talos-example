@@ -111,6 +111,15 @@ data "talos_machine_configuration" "worker" {
   kubernetes_version = var.kubernetes_version
 }
 
+resource "talos_machine_configuration_apply" "worker" {
+  count = length(var.worker_node_ips)
+
+  client_configuration        = talos_machine_secrets.this.client_configuration
+  endpoint                    = var.cluster_endpoints[0]
+  machine_configuration_input = data.talos_machine_configuration.worker.machine_configuration
+  node                        = var.worker_node_ips[count.index]
+}
+
 data "talos_cluster_kubeconfig" "this" {
   depends_on = [talos_machine_bootstrap.controlplane]
 
