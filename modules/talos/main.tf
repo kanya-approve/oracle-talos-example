@@ -85,21 +85,20 @@ data "talos_machine_configuration" "controlplane" {
   kubernetes_version = var.kubernetes_version
 }
 
+resource "talos_machine_bootstrap" "controlplane" {
+  client_configuration = talos_machine_secrets.this.client_configuration
+  endpoint             = var.cluster_endpoints[0]
+  node                 = var.controlplane_node_ips[0]
+}
+
 resource "talos_machine_configuration_apply" "controlplane" {
   count = length(var.controlplane_node_ips)
-
+  depends_on = [talos_machine_bootstrap.controlplane]
+  
   client_configuration        = talos_machine_secrets.this.client_configuration
   endpoint                    = var.cluster_endpoints[0]
   machine_configuration_input = data.talos_machine_configuration.controlplane.machine_configuration
   node                        = var.controlplane_node_ips[count.index]
-}
-
-resource "talos_machine_bootstrap" "controlplane" {
-  depends_on = [talos_machine_configuration_apply.controlplane]
-
-  client_configuration = talos_machine_secrets.this.client_configuration
-  endpoint             = var.cluster_endpoints[0]
-  node                 = var.controlplane_node_ips[0]
 }
 
 data "talos_machine_configuration" "worker" {
