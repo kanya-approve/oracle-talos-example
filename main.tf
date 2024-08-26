@@ -274,8 +274,7 @@ resource "flux_bootstrap_git" "talos_cluster" {
 
   provisioner "local-exec" {
     command = <<EOT
-      # Fetch the Sealed Secrets controller's certificate
-      kubeseal --fetch-cert --controller-name=sealed-secrets-controller --controller-namespace=flux-system > pub-sealed-secrets.pem
+      curl -sL https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.27.1/kubeseal-0.27.1-linux-amd64.tar.gz | tar -xz
     EOT
   }
 }
@@ -284,6 +283,7 @@ module "sealed_secret_cert" {
   source = "matti/resource/shell"
 
   command = "kubeseal --fetch-cert --controller-name=sealed-secrets-controller --controller-namespace=flux-system"
+  depends_on = [flux_bootstrap_git.talos_cluster]
 }
 
 resource "github_repository_file" "sealed_secret_cert" {
