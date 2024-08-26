@@ -280,11 +280,17 @@ resource "flux_bootstrap_git" "talos_cluster" {
   }
 }
 
+module "sealed_secret_cert" {
+  source = "matti/resource/shell"
+
+  command = "kubeseal --fetch-cert --controller-name=sealed-secrets-controller --controller-namespace=flux-system"
+}
+
 resource "github_repository_file" "sealed_secret_cert" {
-  repository          = data.github_repository.this.name
-  file                = "pub-sealed-secrets.pem"
-  content             = filebase64("${path.module}/pub-sealed-secrets.pem")
   branch              = "main"
   commit_message      = "Add Sealed Secrets public certificate"
+  content             = base64encode(module.sealed_secret_cert.stdout)
+  file                = "${var.flux_repository_path}/pub-sealed-secrets.pem"
   overwrite_on_create = true
+  repository          = data.github_repository.this.name
 }
