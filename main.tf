@@ -282,7 +282,7 @@ resource "flux_bootstrap_git" "talos_cluster" {
 module "sealed_secret_cert" {
   source = "matti/resource/shell"
 
-  command = "kubeseal --fetch-cert --controller-name=sealed-secrets-controller --controller-namespace=flux-system"
+  command    = "kubeseal --fetch-cert --controller-name=sealed-secrets-controller --controller-namespace=flux-system"
   depends_on = [flux_bootstrap_git.talos_cluster]
 }
 

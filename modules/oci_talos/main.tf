@@ -56,6 +56,7 @@ module "controlplane_instance_group" {
   source_ocid                 = var.arm64_image_id
   ssh_public_keys             = ""
   subnet_ocids                = [var.subnet_id]
+  user_data                   = base64encode(var.controlplane_user_data)
 
   cloud_agent_plugins = {
     "autonomous_linux" : "DISABLED",
@@ -86,6 +87,7 @@ module "worker_instance_group" {
   source_ocid                 = var.arm64_image_id
   ssh_public_keys             = ""
   subnet_ocids                = [var.subnet_id]
+  user_data                   = base64encode(var.worker_user_data)
 
   cloud_agent_plugins = {
     "autonomous_linux" : "DISABLED",

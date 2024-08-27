@@ -80,9 +80,9 @@ data "talos_machine_configuration" "controlplane" {
   config_patches     = concat([local.all_node_patch], var.config_patches)
   docs               = false
   examples           = false
+  kubernetes_version = var.kubernetes_version
   machine_secrets    = talos_machine_secrets.this.machine_secrets
   machine_type       = "controlplane"
-  kubernetes_version = var.kubernetes_version
 }
 
 resource "talos_machine_bootstrap" "controlplane" {
@@ -91,34 +91,15 @@ resource "talos_machine_bootstrap" "controlplane" {
   node                 = var.controlplane_node_ips[0]
 }
 
-resource "talos_machine_configuration_apply" "controlplane" {
-  count = length(var.controlplane_node_ips)
-  depends_on = [talos_machine_bootstrap.controlplane]
-
-  client_configuration        = talos_machine_secrets.this.client_configuration
-  endpoint                    = var.cluster_endpoints[0]
-  machine_configuration_input = data.talos_machine_configuration.controlplane.machine_configuration
-  node                        = var.controlplane_node_ips[count.index]
-}
-
 data "talos_machine_configuration" "worker" {
   cluster_endpoint   = "https://${var.cluster_endpoints[0]}:6443"
   cluster_name       = var.cluster_name
   config_patches     = concat([local.all_node_patch], var.config_patches)
   docs               = false
   examples           = false
+  kubernetes_version = var.kubernetes_version
   machine_secrets    = talos_machine_secrets.this.machine_secrets
   machine_type       = "worker"
-  kubernetes_version = var.kubernetes_version
-}
-
-resource "talos_machine_configuration_apply" "worker" {
-  count = length(var.worker_node_ips)
-
-  client_configuration        = talos_machine_secrets.this.client_configuration
-  endpoint                    = var.cluster_endpoints[0]
-  machine_configuration_input = data.talos_machine_configuration.worker.machine_configuration
-  node                        = var.worker_node_ips[count.index]
 }
 
 data "talos_cluster_kubeconfig" "this" {
