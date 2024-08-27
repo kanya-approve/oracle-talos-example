@@ -93,7 +93,8 @@ resource "talos_machine_bootstrap" "controlplane" {
 
 resource "talos_machine_configuration_apply" "controlplane" {
   count = length(var.controlplane_node_ips)
-  
+  depends_on = [talos_machine_bootstrap.controlplane]
+
   client_configuration        = talos_machine_secrets.this.client_configuration
   endpoint                    = var.cluster_endpoints[0]
   machine_configuration_input = data.talos_machine_configuration.controlplane.machine_configuration
