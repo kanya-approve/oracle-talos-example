@@ -35,7 +35,7 @@
 13. Create a VCS project on terraform cloud and note the name
 14. Create a workspace on terraform cloud under that project and note the name
 15. [Create a classic Github personal access token with repo permissions using this link and note the value](https://github.com/settings/tokens/new)
-16. [Create a new repo titled fleet-infra using this link](https://github.com/new?template_name=oracle-talos-flux-example&template_owner=kanya-approve&name=fleet-infra)
+16. [Create a new repo titled fleet-infra using this link](https://github.com/new?template_name=oracle-talos-flux-example&template_owner=kanya-approve&name=fleet-infra)...this is only for Flux
 17. Under the created workspace variables, create a new workspace terraform variable called cluster_domain_endpoint and make the value your domain (example.com) if you have one otherwise leave it empty
 18. Under the created workspace variables, create a new workspace terraform variable called fingerprint and make the value after fingerprint= from what you copied on step #11
 19. Under the created workspace variables, create a new workspace terraform variable called region and make the value after region= from what you copied on step #11
@@ -46,7 +46,7 @@
 24. Under the created workspace variables, create a new SENSITIVE workspace terraform variable called personal_ip and make the value your personal ipv4 address
 25. Under the created workspace variables, create a new SENSITIVE workspace ENVIRONMENT variable called GITHUB_TOKEN and make the value what you noted on step #15
 26. Start a new terraform cloud run and your new Oracle cloud talos cluster will be live
-27. In your repo folder, create a backend.tf file with the contents below
+27. In your Terraform repo folder, create a backend.tf file with the contents below
 
     ```hcl
     terraform {
