@@ -20,7 +20,7 @@
 
 ## Steps
 
-1. [Follow this tutorial until the "Convert your trial to PAYG" step](https://mattscott.cloud/kubernetes-on-oracle-cloud-for-free)
+1. [Follow this tutorial until the "Convert your trial to PAYG" step](https://web.archive.org/web/20231021060449/https://mattscott.cloud/kubernetes-on-oracle-cloud-for-free/)
 2. Use this repository as a template repository to make your own
 3. Clone the repository
 4. Create a bucket on Oracle and note the name
