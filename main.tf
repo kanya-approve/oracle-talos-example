@@ -167,7 +167,7 @@ resource "helm_release" "cilium" {
   name         = "cilium"
   namespace    = "kube-system"
   repository   = "https://helm.cilium.io"
-  version      = "1.15.8"
+  version      = "1.16.2"
 
   set {
     name  = "bandwidthManager.bbr"
