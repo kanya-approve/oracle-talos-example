@@ -34,7 +34,7 @@ variable "kubernetes_version" {
 variable "talos_version" {
   description = "The version of Talos to use for the cluster."
   type        = string
-  default     = "v1.7.6"
+  default     = "v1.8.0"
 
   validation {
     condition     = can(regex("^v[0-9]+\\.[0-9]+\\.[0-9]+$", var.talos_version))
