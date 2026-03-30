@@ -2,7 +2,7 @@
 
 This repository provisions an opinionated Talos Kubernetes cluster on Oracle Cloud Infrastructure (OCI) with Terraform. The current flow is built around a custom Oracle-compatible Talos image, Terraform Cloud remote runs, a public OCI Network Load Balancer for the Kubernetes and Talos APIs, Cilium installed by Helm, and Flux bootstrapped into a separate GitHub repository.
 
-The repository has changed meaningfully from the older "manually create a bucket and upload an image" workflow. Terraform now creates the bucket, uploads the image archive, imports the custom image, creates the compute instances, bootstraps Talos, installs Cilium, creates a GitHub deploy key for Flux, bootstraps Flux into a second repository, and commits the Sealed Secrets public certificate into that Flux repository.
+The repository has changed meaningfully from the older "manually create a bucket and upload an image" workflow. Terraform now creates the bucket, uploads the image archive, imports the custom image, creates the compute instances, bootstraps Talos, installs Cilium, creates a GitHub deploy key for Flux, bootstraps Flux into a second repository, and currently commits the Sealed Secrets public certificate into that Flux repository as the default secret-management bootstrap.
 
 ## What This Repository Currently Creates
 
@@ -32,7 +32,7 @@ The repository has changed meaningfully from the older "manually create a bucket
 - A Helm-installed Cilium deployment with Hubble Relay and Hubble UI enabled.
 - A GitHub deploy key for Flux.
 - A Flux bootstrap into a second GitHub repository.
-- A committed `pub-sealed-secrets.pem` file in the Flux repository path.
+- By default, a committed `pub-sealed-secrets.pem` file in the Flux repository path.
 
 ## Current Topology And Defaults
 
@@ -54,7 +54,7 @@ These defaults matter when deciding whether the repository matches what you want
 - The default Flux repository path is `clusters/talos-cluster`.
 - The default root Talos image version metadata is `1.12.6`.
 - The default Talos extension list exposed at the root is `["crun"]`.
-- The Talos module itself still defaults to Talos `v1.12.4` and Kubernetes `1.35.1`.
+- The Talos module itself currently defaults to Talos `v1.12.6` and Kubernetes `1.35.3`.
 
 ## Technologies Used: What And Why
 
@@ -68,9 +68,11 @@ What it is:
 Why this repository uses it:
 
 - The entire project is built around running Talos on Oracle ARM instances, specifically `VM.Standard.A1.Flex`.
-- Oracle Cloud has a notably generous free tier, which makes it a practical place to experiment with a small Talos cluster before spending real money.
+- Oracle Cloud has a notably generous Always Free tier for Ampere A1 compute, with `4` total OCPUs and `24` GB of memory that can be allocated flexibly across instances.
+- Oracle also includes `200` GB total of Always Free block storage for boot volumes and block volumes combined in the home region, which is enough to make a small Talos cluster practical for testing and homelab-style use.
 - OCI supports importing a custom Talos image, which is necessary because Talos is not used here as a stock marketplace image.
 - Object Storage gives Terraform a place to upload the Oracle-compatible image archive before importing it as a bootable custom image.
+- The current `1 control plane + 1 worker` layout in this repository maps naturally onto that free-tier-style footprint, as long as you stay within Oracle's current limits and can get A1 capacity in your chosen region.
 
 ### Terraform
 
@@ -107,6 +109,7 @@ Why this repository uses it:
 - It keeps the node OS minimal, security-focused, and API-driven, which fits well with reproducible cluster provisioning.
 - The repository intentionally avoids SSH-based node management and instead relies on `talosctl` and machine configuration documents.
 - It is purpose-built for Kubernetes rather than being a general-purpose Linux distribution with Kubernetes added later.
+- Talos is designed around ideas that fit this repository well: immutable infrastructure, declarative configuration, and secure-by-default node management.
 - Talos integrates cleanly with automated machine config generation and bootstrap through the Terraform Talos provider.
 
 ### Talos Image Factory
@@ -155,6 +158,7 @@ Why this repository uses it:
 - It separates infrastructure bootstrapping from ongoing cluster application management.
 - Terraform gets the cluster to a usable state, then Flux takes over continuous reconciliation from `flux_repository_path`.
 - Once that GitOps loop is in place, the declarative workflow is usually simpler to manage than continuing to rely on ad hoc manual cluster changes.
+- Flux continuously reconciles the cluster against the desired state in Git, which reduces drift and makes ongoing management more predictable.
 - This repository also writes the Sealed Secrets public certificate into the Flux repository so secrets workflows can build on that bootstrap.
 
 ### Helm
@@ -180,7 +184,7 @@ Why this repository uses it:
 - The current configuration enables features such as kube-proxy replacement, Hubble Relay, and Hubble UI.
 - Installing it immediately after Talos bootstrap gives the cluster a working networking stack as part of the same provisioning flow.
 
-### Sealed Secrets / `kubeseal`
+### Sealed Secrets / `kubeseal` (Current Default, Not Mandatory)
 
 What it is:
 
@@ -188,8 +192,10 @@ What it is:
 
 Why this repository uses it:
 
-- After Flux bootstrap, the repository fetches the Sealed Secrets public certificate and commits it into the Flux repository.
+- The current Terraform workflow fetches the Sealed Secrets public certificate and commits it into the Flux repository.
 - That gives downstream GitOps workflows a starting point for managing encrypted secrets in Git instead of handling raw secret manifests.
+- This is an opinionated default, not a hard requirement for the overall platform design.
+- If you prefer an external secret store, a cloud secret manager integration, SOPS, Vault, External Secrets Operator, or another approach, you can replace this part of the workflow with the secret-management model you prefer.
 
 ### `talosctl`
 
@@ -220,7 +226,7 @@ These are the main places where the current repository behavior differs from wha
 
 The root variable `talos_image_version` controls the version metadata used when Terraform imports the uploaded OCI image. That value is consumed by the OCI image import module.
 
-The Talos machine configuration module uses its own `talos_version` default, which currently lives in `modules/talos/variables.tf` and defaults to `v1.12.4`. That version is not currently exposed as a root variable. If you build a newer Talos OCI image, update the module's Talos version too so the imported boot image and the generated Talos installer/machine configs stay aligned.
+The Talos machine configuration module uses its own `talos_version` default, which currently lives in `modules/talos/variables.tf` and defaults to `v1.12.6`. That version is not currently exposed as a root variable. The defaults currently align, but they are still separate settings. If you build a different Talos OCI image later, update the module's Talos version too so the imported boot image and the generated Talos installer/machine configs stay aligned.
 
 ### 2. `talos_extensions` Should Match What You Selected In Talos Image Factory
 
@@ -289,7 +295,6 @@ These are the files that matter most when you are changing behavior:
 - Basic familiarity with cloud concepts and Terraform.
 - A GitHub account.
 - [Kubectl](https://kubernetes.io/docs/tasks/tools)
-- [Kubeseal](https://github.com/bitnami-labs/sealed-secrets)
 - [Python](https://www.python.org/downloads)
 - [Talos CLI](https://www.talos.dev/latest/talos-guides/install/talosctl)
 - [Terraform CLI](https://developer.hashicorp.com/terraform/install)
@@ -302,6 +307,7 @@ No separate decompression tool is required for the default image-build workflow 
 
 - [7-Zip](https://www.7-zip.org/download.html): not required for the current default build flow, but still useful if you want to inspect or manipulate archives manually, especially on Windows.
 - [GitHub Desktop](https://github.com/apps/desktop): optional convenience tool if you prefer not to clone and commit from the terminal.
+- [Kubeseal](https://github.com/bitnami-labs/sealed-secrets): only needed if you want to keep using the current Sealed Secrets-based secret flow instead of replacing it with another secret-management approach.
 
 ### Getting `qemu-img`
 
@@ -603,4 +609,5 @@ These are currently inside modules, not exposed at the root:
 - Because control plane scheduling is enabled, workloads may run on the control plane node.
 - Because the nodes are in a private subnet and no SSH keys are configured, your normal operational path is through the Talos API, the Kubernetes API, and the OCI console, not SSH.
 - Flux bootstrap writes into `flux_repository_path`, and the Sealed Secrets public certificate is committed there as `pub-sealed-secrets.pem`.
+- That Sealed Secrets bootstrap is only the current default. You can replace it with an external secret store or another secret-management workflow if that better fits your environment.
 - If you change the image version or extensions later, keep the image build inputs, `talos_image_version`, `talos_extensions`, and the Talos module version in sync.
