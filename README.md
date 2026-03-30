@@ -56,6 +56,162 @@ These defaults matter when deciding whether the repository matches what you want
 - The default Talos extension list exposed at the root is `["crun"]`.
 - The Talos module itself still defaults to Talos `v1.12.4` and Kubernetes `1.35.1`.
 
+## Technologies Used: What And Why
+
+### Oracle Cloud Infrastructure (OCI)
+
+What it is:
+
+- The cloud platform this repository targets.
+- It provides the compartment, networking, Object Storage bucket, custom image import, ARM compute instances, and network load balancer.
+
+Why this repository uses it:
+
+- The entire project is built around running Talos on Oracle ARM instances, specifically `VM.Standard.A1.Flex`.
+- Oracle Cloud has a notably generous free tier, which makes it a practical place to experiment with a small Talos cluster before spending real money.
+- OCI supports importing a custom Talos image, which is necessary because Talos is not used here as a stock marketplace image.
+- Object Storage gives Terraform a place to upload the Oracle-compatible image archive before importing it as a bootable custom image.
+
+### Terraform
+
+What it is:
+
+- The infrastructure-as-code tool that defines and applies the OCI, GitHub, Flux, Helm, and Talos resources.
+
+Why this repository uses it:
+
+- It gives the whole cluster lifecycle a declarative source of truth.
+- It lets the repository stitch together cloud infrastructure, node provisioning, Talos bootstrap, Kubernetes add-ons, and GitOps bootstrap in one apply.
+- The module layout in this repository keeps OCI image import, compute provisioning, and Talos config generation separated but composable.
+
+### Terraform Cloud
+
+What it is:
+
+- The remote execution and state backend workflow this repository is written around.
+
+Why this repository uses it:
+
+- It centralizes state and makes it easier to run applies against OCI without relying only on one local workstation.
+- It gives a place to store sensitive OCI and GitHub credentials as workspace variables.
+- The README flow assumes remote runs first, then a local `backend.tf` and `terraform output -json` workflow afterward for Talos access files.
+
+### Talos Linux
+
+What it is:
+
+- A secure, minimal, Kubernetes-focused operating system for running cluster nodes.
+
+Why this repository uses it:
+
+- It keeps the node OS minimal, security-focused, and API-driven, which fits well with reproducible cluster provisioning.
+- The repository intentionally avoids SSH-based node management and instead relies on `talosctl` and machine configuration documents.
+- It is purpose-built for Kubernetes rather than being a general-purpose Linux distribution with Kubernetes added later.
+- Talos integrates cleanly with automated machine config generation and bootstrap through the Terraform Talos provider.
+
+### Talos Image Factory
+
+What it is:
+
+- The Talos image and installer generation service used to build Oracle-compatible Talos artifacts and installer URLs.
+
+Why this repository uses it:
+
+- OCI needs a custom image archive in the right format, and the repository's `build_oracle_image.py` flow starts from the final Talos Image Factory page URL.
+- The Terraform Talos module also uses the Talos Image Factory provider data sources to resolve extension-aware installer images.
+- This gives you control over the Talos version and system extensions instead of hard-coding a single immutable image forever.
+
+### `qemu-img`
+
+What it is:
+
+- The disk conversion tool used by `build_oracle_image.py`.
+
+Why this repository uses it:
+
+- The helper script downloads a Talos raw disk image and converts it into the `qcow2` format expected by Oracle's BYOI import workflow.
+- Without it, the repository cannot produce the `oracle-arm64.oci` archive that Terraform uploads to OCI Object Storage.
+
+### GitHub
+
+What it is:
+
+- The source-control platform used for the Terraform repository and the separate Flux repository.
+
+Why this repository uses it:
+
+- Terraform Cloud watches the Terraform repository.
+- Flux is bootstrapped against a second GitHub repository so cluster state can be managed through GitOps.
+- The GitHub provider creates the deploy key that allows Flux to pull from that repository.
+
+### FluxCD
+
+What it is:
+
+- A GitOps operator that continuously reconciles Kubernetes state from a Git repository.
+
+Why this repository uses it:
+
+- It separates infrastructure bootstrapping from ongoing cluster application management.
+- Terraform gets the cluster to a usable state, then Flux takes over continuous reconciliation from `flux_repository_path`.
+- Once that GitOps loop is in place, the declarative workflow is usually simpler to manage than continuing to rely on ad hoc manual cluster changes.
+- This repository also writes the Sealed Secrets public certificate into the Flux repository so secrets workflows can build on that bootstrap.
+
+### Helm
+
+What it is:
+
+- The Kubernetes package manager used here through the Terraform Helm provider.
+
+Why this repository uses it:
+
+- The repository installs Cilium directly during Terraform apply.
+- Using the Helm provider keeps that bootstrap step inside the same workflow as cluster creation instead of requiring a separate manual install step.
+
+### Cilium
+
+What it is:
+
+- The Kubernetes CNI and networking layer this repository installs into the cluster.
+
+Why this repository uses it:
+
+- Kubernetes needs a CNI before the cluster is fully useful.
+- The current configuration enables features such as kube-proxy replacement, Hubble Relay, and Hubble UI.
+- Installing it immediately after Talos bootstrap gives the cluster a working networking stack as part of the same provisioning flow.
+
+### Sealed Secrets / `kubeseal`
+
+What it is:
+
+- The Bitnami Sealed Secrets tooling for encrypting Kubernetes secrets so they can live safely in Git.
+
+Why this repository uses it:
+
+- After Flux bootstrap, the repository fetches the Sealed Secrets public certificate and commits it into the Flux repository.
+- That gives downstream GitOps workflows a starting point for managing encrypted secrets in Git instead of handling raw secret manifests.
+
+### `talosctl`
+
+What it is:
+
+- The Talos administrative CLI.
+
+Why this repository uses it:
+
+- It is the primary operational interface for this cluster because the nodes are not managed over SSH.
+- `get_talos_files.py` writes `~/.talos/config` and then uses `talosctl kubeconfig` to make local Kubernetes access work.
+
+### `kubectl`
+
+What it is:
+
+- The standard Kubernetes CLI.
+
+Why this repository uses it:
+
+- Once Talos has generated a kubeconfig, `kubectl` becomes the normal day-to-day client for verifying node health and interacting with workloads in the cluster.
+
 ## Important Caveats
 
 These are the main places where the current repository behavior differs from what a quick read might otherwise imply.
