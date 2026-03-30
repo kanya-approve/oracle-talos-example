@@ -42,6 +42,12 @@ variable "talos_version" {
   }
 }
 
+variable "talos_extensions" {
+  default     = ["crun"]
+  description = "Official Talos system extensions to include in the image factory schematic."
+  type        = list(string)
+}
+
 variable "worker_node_ips" {
   description = "The worker plane node ips"
   type        = list(string)
