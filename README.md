@@ -454,6 +454,7 @@ No separate decompression tool is required for the default image-build workflow 
     - If you do not have a domain name, leave it empty and Terraform will fall back to using the Oracle network load balancer IP.
     - Enter only the hostname or FQDN, not `https://` and not a port.
     - If you set this, make sure DNS is working before you run `get_talos_files.py`, because the helper script will use the first endpoint from `talosconfig`.
+    - **Important**: The load balancer IP and control plane instance are not created until `terraform apply` completes. If you are using a custom domain, you cannot set the DNS A record until after the first apply finishes and you know the load balancer IP. Plan for a two-phase workflow: run the initial apply without `cluster_domain_endpoint` set (or with a placeholder), retrieve the load balancer IP from the Terraform outputs or OCI console, set the A record, then set `cluster_domain_endpoint` and re-apply.
 20. Create a Terraform variable named `fingerprint`.
     - Set it to the value after `fingerprint=` from step 13.
     - This is required by the OCI provider in `provider.tf`.
@@ -509,9 +510,12 @@ No separate decompression tool is required for the default image-build workflow 
       - default: `1`
       - change this if Oracle capacity for `VM.Standard.A1.Flex` is only available in another availability domain for your region
 29. Start a Terraform Cloud run.
-    - Queue a plan and apply from the Terraform Cloud workspace once all variables are set.
+    - Only queue the apply once all variables from steps 20–28 are set **and** the `oracle-arm64.oci` archive is available in the repository working directory at the path expected by `talos_image_file`. If the archive is missing the run will fail when Terraform tries to upload it to OCI Object Storage.
+    - Queue a plan and apply from the Terraform Cloud workspace.
     - During the run, Terraform will create OCI networking, the compartment, the bucket, the uploaded image object, the custom image, the load balancer, the Talos instances, Talos configuration, Cilium, and the supporting GitHub/Flux material.
     - The first run can take a while because Oracle image import and instance provisioning are not instant.
+    - The Cilium install step is particularly slow. The Helm release timeout has been set to 10 minutes to account for the time it takes for the cluster networking layer to converge after Talos bootstrap. Expect a noticeable pause at this point in the apply output.
+    - The Flux bootstrap and all subsequent GitOps steps happen inside this same apply run. They cannot proceed until all infrastructure — networking, compute instances, Talos bootstrap, and Cilium — is fully created. Terraform enforces this through resource dependencies, but it means the entire apply must complete successfully before anything in steps 30 and onward will work.
 30. In your local repository folder, create a `backend.tf` file with the contents below.
     - This tells your local Terraform CLI how to talk to the same Terraform Cloud workspace you just used remotely.
     - Replace the placeholders with your Terraform Cloud organization, project, and workspace names from steps 15 and 16.
