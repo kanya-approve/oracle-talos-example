@@ -169,6 +169,7 @@ resource "helm_release" "cilium" {
   force_update = true
   name         = "cilium"
   namespace    = "kube-system"
+  timeout      = 600
   repository   = "https://helm.cilium.io"
   version      = "1.18.8"
 
