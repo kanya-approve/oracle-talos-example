@@ -68,9 +68,7 @@ locals {
 data "talos_image_factory_extensions_versions" "this" {
   talos_version = var.talos_version
   filters = {
-    names = [
-      "crun"
-    ]
+    names = var.talos_extensions
   }
 }
 
@@ -132,13 +130,10 @@ data "talos_machine_configuration" "worker" {
   talos_version      = var.talos_version
 }
 
-data "talos_cluster_kubeconfig" "this" {
+resource "talos_cluster_kubeconfig" "this" {
   depends_on = [talos_machine_bootstrap.controlplane]
 
   client_configuration = talos_machine_secrets.this.client_configuration
   endpoint             = var.cluster_endpoints[0]
   node                 = var.controlplane_node_ips[0]
-  timeouts = {
-    read = "30s"
-  }
 }
